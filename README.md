@@ -86,7 +86,20 @@ To customize these variables, add to your Emacs configuration:
 (setq rholang-indent-size 4)
 ```
 
-For Spacemacs, these variables are automatically synchronized with the layer configuration.
+For Spacemacs, these variables are automatically synchronized with the layer configuration, for example:
+
+```emacs-lisp
+(defun dotspacemacs/layers ()
+  (setq-default
+    (rholang :variables
+             rholang-lsp-server-path "rholang-language-server"
+             rholang-lsp-log-level "debug"
+             rholang-lsp-enable t
+             rholang-rnode-host "localhost"
+             rholang-rnode-port 40403
+             rholang-indent-size 4
+             )))
+```
 
 ## Usage
 
