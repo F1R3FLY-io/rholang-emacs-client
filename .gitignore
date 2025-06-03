@@ -1,0 +1,12 @@
+# Ignore everything by default
+*
+
+# Allow file patterns to be specified
+!*/
+
+# Specific file patterns to include
+!/.gitignore
+!/layers/*.el
+!/LICENSE.TXT
+!/README.md
+!/rholang-mode/*.el
