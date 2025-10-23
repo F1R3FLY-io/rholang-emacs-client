@@ -35,13 +35,25 @@
   :type 'boolean
   :group 'rholang)
 
+(defcustom rholang-validator-backend "rust"
+  "Validator backend to use for semantic analysis.
+Options: 'rust' for embedded interpreter, 'grpc' for legacy RNode server."
+  :type '(choice (const "rust") (const "grpc"))
+  :group 'rholang)
+
+(defcustom rholang-grpc-address "localhost:40402"
+  "Address of the RNode gRPC server when using the 'grpc' validator backend.
+Format: 'host:port'."
+  :type 'string
+  :group 'rholang)
+
 (defcustom rholang-rnode-host "localhost"
-  "Host for RNode instance."
+  "Host for RNode instance (used for optional RNode status check)."
   :type 'string
   :group 'rholang)
 
 (defcustom rholang-rnode-port 40403
-  "Port for RNode status endpoint."
+  "Port for RNode status endpoint (used for optional RNode status check)."
   :type 'integer
   :group 'rholang)
 
@@ -70,29 +82,39 @@
 (defun rholang-lsp-setup ()
   "Set up LSP for rholang-mode."
   (message "Attempting to set up LSP for rholang-mode")
-  (when (and rholang-lsp-enable (rholang-lsp--check-rnode))
-    (message "RNode check passed, registering LSP client for rholang-mode")
+  (when rholang-lsp-enable
+    ;; Only check RNode if using gRPC backend
+    (when (and (string= rholang-validator-backend "grpc")
+               (not (rholang-lsp--check-rnode)))
+      (message "Warning: gRPC backend selected but RNode is not running"))
+
+    (message "Registering LSP client for rholang-mode with %s backend" rholang-validator-backend)
     ;; Set workspace root to file's directory
     (when (buffer-file-name)
       (lsp-workspace-folders-add (file-name-directory (buffer-file-name))))
-    (lsp-register-client
-     (make-lsp-client
-      :new-connection (lsp-stdio-connection
-                       `(,rholang-lsp-server-path
-                         "--no-color"
-                         "--stdio"
-                         ,(concat "--log-level=" rholang-lsp-log-level)
-                         ,(concat "--client-process-id=" (number-to-string (emacs-pid)))))
-      :major-modes '(rholang-mode)
-      :server-id 'rholang-lsp
-      :language-id "rholang"
-      :notification-handlers
-      (lsp-ht ("window/logMessage" 'lsp--on-message)
-              ("textDocument/publishDiagnostics" 'lsp--on-diagnostics))
-      :priority 0
-      :multi-root nil))
-    (message "Starting LSP for rholang-mode")
-    (lsp-deferred)))
+
+    ;; Build command with validator backend
+    (let ((base-cmd `(,rholang-lsp-server-path
+                      "--no-color"
+                      "--stdio"
+                      ,(concat "--log-level=" rholang-lsp-log-level)
+                      ,(concat "--client-process-id=" (number-to-string (emacs-pid)))))
+          (backend-args (if (string= rholang-validator-backend "rust")
+                            '("--validator-backend" "rust")
+                          `("--validator-backend" ,(concat "grpc:" rholang-grpc-address)))))
+      (lsp-register-client
+       (make-lsp-client
+        :new-connection (lsp-stdio-connection (append base-cmd backend-args))
+        :major-modes '(rholang-mode)
+        :server-id 'rholang-lsp
+        :language-id "rholang"
+        :notification-handlers
+        (lsp-ht ("window/logMessage" 'lsp--on-message)
+                ("textDocument/publishDiagnostics" 'lsp--on-diagnostics))
+        :priority 0
+        :multi-root nil))
+      (message "Starting LSP for rholang-mode with %s backend" rholang-validator-backend)
+      (lsp-deferred))))
 
 (provide 'rholang-lsp)
 
