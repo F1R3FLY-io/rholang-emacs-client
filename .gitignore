@@ -11,3 +11,8 @@
 !/README.md
 !/CHANGELOG.md
 !/rholang-mode/*.el
+!/rholang-mode/*.md
+!/docs/
+!/docs/**/*.md
+!/queries/
+!/queries/**/*.scm

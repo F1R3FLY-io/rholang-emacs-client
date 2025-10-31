@@ -160,17 +160,28 @@ The language server supports two modes for obtaining diagnostics:
 
 ### Using Tree-Sitter Mode (Emacs 29.1+)
 
-If you have Emacs 29.1+ with tree-sitter support:
+Tree-sitter provides superior syntax highlighting, indentation, and navigation using an Abstract Syntax Tree (AST) instead of regular expressions.
 
-1. Install the Rholang tree-sitter grammar (see [TREE-SITTER.md](rholang-mode/TREE-SITTER.md))
-2. Load the tree-sitter mode:
+**Quick Start**:
+1. Ensure Emacs 29.1+ with tree-sitter support
+2. Install the Rholang grammar (see [Quick Start Guide](docs/tree-sitter/QUICK-START.md))
+3. Load the tree-sitter mode:
    ```emacs-lisp
    (require 'rholang-ts-mode)
    ```
-3. The mode will automatically be used for `.rho` files if the grammar is installed
-4. Alternatively, manually switch with `M-x rholang-ts-mode`
+4. Open any `.rho` file - tree-sitter mode activates automatically if available
 
-For more details on tree-sitter setup, see the [Tree-Sitter Setup Guide](rholang-mode/TREE-SITTER.md).
+**Documentation**:
+- **[Quick Start Guide](docs/tree-sitter/QUICK-START.md)** - Installation and configuration
+- **[Architecture Guide](docs/tree-sitter/ARCHITECTURE.md)** - Technical details and internals
+- **[Grammar Specification](docs/tree-sitter/GRAMMAR.md)** - How the parser is defined
+- **[Legacy Guide](rholang-mode/TREE-SITTER.md)** - Original setup documentation
+
+**Benefits over traditional mode**:
+- 🎯 **Precise**: AST-based highlighting (no regex ambiguity)
+- ⚡ **Fast**: Incremental parsing (only re-parse changes)
+- 🔧 **Robust**: Error recovery maintains valid AST
+- 🧭 **Smart**: Context-aware indentation and navigation
 
 ### Keybindings (Spacemacs)
 
@@ -278,24 +289,32 @@ Use `SPC l r` to open a custom layout (`@Rholang`) that loads `rholang-mode.el` 
 
 ```
 rholang-emacs-client
+├── docs
+│   └── tree-sitter           # Tree-sitter documentation
+│       ├── README.md         # Overview and index
+│       ├── QUICK-START.md    # Installation guide
+│       ├── ARCHITECTURE.md   # Technical details
+│       └── GRAMMAR.md        # Grammar specification
 ├── layers
 │   └── rholang
 │       ├── config.el         # Spacemacs layer configuration
 │       └── packages.el       # Spacemacs package definitions
 ├── rholang-mode
+│   ├── rholang-doctor.el     # Diagnostic utilities
 │   ├── rholang-lsp.el        # LSP integration for Rholang
 │   ├── rholang-mode.el       # Major mode for Rholang (traditional)
 │   ├── rholang-ts-mode.el    # Tree-sitter based mode (Emacs 29.1+)
 │   ├── rholang-syntax.el     # Syntax highlighting definitions
-│   └── TREE-SITTER.md        # Tree-sitter setup guide
+│   └── TREE-SITTER.md        # Legacy tree-sitter setup guide
 ├── queries
 │   └── rholang               # Tree-sitter query files
-│       ├── highlights.scm
-│       ├── indents.scm
-│       ├── locals.scm
-│       ├── folds.scm
-│       ├── injections.scm
-│       └── textobjects.scm
+│       ├── highlights.scm    # Syntax highlighting patterns
+│       ├── indents.scm       # Indentation rules
+│       ├── locals.scm        # Variable scoping
+│       ├── folds.scm         # Code folding regions
+│       ├── injections.scm    # Embedded language support
+│       └── textobjects.scm   # Text object definitions
+├── CHANGELOG.md              # Version history
 ├── LICENSE.TXT               # License file
 └── README.md                 # This file
 ```
