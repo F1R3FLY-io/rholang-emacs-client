@@ -1,7 +1,7 @@
 ;;; config.el --- Rholang Layer Configuration -*- lexical-binding: t; -*-
 
 ;; Author: Dylon Edwards <dylon@vinarytree.io>
-;; Version: 0.0.3
+;; Version: 0.0.4
 ;; Keywords: languages, rholang
 ;; URL: https://github.com/F1R3FLY-io/rholang-emacs-client
 ;; License: SSL
@@ -27,18 +27,30 @@
 (defvar rholang-lsp-enable t
   "Enable LSP support for rholang-mode.")
 
-(defvar rholang-rnode-host "localhost"
-  "Host for RNode instance.")
-
-(defvar rholang-rnode-port 40403
-  "Port for RNode status endpoint.")
-
 (defvar rholang-indent-size 2
   "Indentation size for Rholang code.")
+
+(defvar rholang-use-tree-sitter nil
+  "When non-nil, use tree-sitter based mode (rholang-ts-mode) instead of traditional rholang-mode.
+Requires Emacs 29.1+ with tree-sitter support and the Rholang grammar installed.")
+
+(defvar rholang-use-rnode nil
+  "Use RNode for diagnostics via gRPC.
+When non-nil, the language server will communicate with RNode via gRPC.
+When nil, the embedded Rust parser/interpreter will be used.")
+
+(defvar rholang-grpc-host "localhost"
+  "RNode gRPC server host.
+Used when `rholang-use-rnode' is non-nil.")
+
+(defvar rholang-grpc-port 40402
+  "RNode gRPC server port.
+Used when `rholang-use-rnode' is non-nil.")
 
 ;; Configure lsp-mode languageId for rholang-mode
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration '(rholang-mode . "rholang"))
+  (add-to-list 'lsp-language-id-configuration '(rholang-ts-mode . "rholang"))
   (add-to-list 'lsp-language-id-configuration '("\\.rho\\'" . "rholang")))
 
 (provide 'config)

@@ -1,7 +1,7 @@
 ;;; rholang-mode.el --- Major mode for editing Rholang files -*- lexical-binding: t; -*-
 
 ;; Author: Dylon Edwards <dylon@vinarytree.io>
-;; Version: 0.0.3
+;; Version: 0.0.4
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "8.0.0"))
 ;; Keywords: languages, rholang, lsp
 ;; URL: https://github.com/F1R3FLY-io/rholang-emacs-client
@@ -15,6 +15,7 @@
 
 (require 'rholang-syntax)
 (require 'rholang-lsp)
+(require 'rholang-doctor)
 (require 'smie)
 
 (defgroup rholang nil

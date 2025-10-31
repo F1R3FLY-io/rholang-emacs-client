@@ -9,4 +9,5 @@
 !/layers/*.el
 !/LICENSE.TXT
 !/README.md
+!/CHANGELOG.md
 !/rholang-mode/*.el
