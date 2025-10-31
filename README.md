@@ -69,11 +69,16 @@
    (setq-default dotspacemacs-configuration-layers
                  '(
                    ;; Other layers
-                   rholang
+                   (rholang :variables
+                            rholang-lsp-enable t
+                            rholang-use-rnode nil
+                            rholang-indent-size 2)
                    ))
    ```
 
 3. Restart Spacemacs or reload the configuration with `SPC f e R`.
+
+**📖 For complete Spacemacs configuration options**, see the [Spacemacs Configuration Guide](docs/SPACEMACS-CONFIG.md).
 
 ## Configuration
 
