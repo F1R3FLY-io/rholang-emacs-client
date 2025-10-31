@@ -59,6 +59,8 @@ Used when `rholang-use-rnode' is non-nil."
   (message "Attempting to set up LSP for rholang-mode")
   (when rholang-lsp-enable
     (message "Registering LSP client for rholang-mode")
+    ;; Enable semantic tokens (context-aware highlighting)
+    (setq-local lsp-semantic-tokens-enable t)
     ;; Set workspace root to file's directory
     (when (buffer-file-name)
       (lsp-workspace-folders-add (file-name-directory (buffer-file-name))))

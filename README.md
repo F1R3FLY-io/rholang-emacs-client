@@ -5,9 +5,10 @@
 ## Features
 
 - **Syntax Highlighting**: Comprehensive syntax highlighting for Rholang keywords, constants, operators, strings, and comments.
+- **Semantic Highlighting**: LSP-powered context-aware highlighting that distinguishes parameters, variables, functions, and types based on semantic meaning.
 - **Automatic Indentation**: Automatic indentation using SMIE (Simple Minded Indentation Engine) with customizable indentation size.
 - **Tree-Sitter Support**: Modern AST-based syntax highlighting and indentation for Emacs 29.1+ (see [TREE-SITTER.md](rholang-mode/TREE-SITTER.md)).
-- **LSP Integration**: Seamless integration with `rholang-language-server` for features like code completion, go-to-definition, and diagnostics.
+- **LSP Integration**: Seamless integration with `rholang-language-server` for features like code completion, go-to-definition, diagnostics, and semantic tokens.
 - **Spacemacs Layer**: Dedicated Spacemacs layer for enhanced keybindings and workspace layout.
 - **Smartparens Support**: Optional integration with `smartparens` for automatic brace handling.
 - **Dual Diagnostic Modes**: Support for both embedded Rust parser/interpreter and legacy RNode via gRPC.
@@ -156,7 +157,18 @@ The language server supports two modes for obtaining diagnostics:
 
 1. Open a `.rho` file, and Emacs will automatically enable `rholang-mode`.
 2. If using RNode (`rholang-use-rnode = t`), ensure an RNode instance is running at the configured gRPC host and port (default: `localhost:40402`).
-3. LSP features (e.g., code completion, go-to-definition) are enabled if `rholang-lsp-enable` is `t`.
+3. LSP features (e.g., code completion, go-to-definition, semantic highlighting) are enabled if `rholang-lsp-enable` is `t`.
+
+#### LSP Semantic Highlighting
+
+The extension supports **LSP semantic tokens** for context-aware highlighting that goes beyond syntax:
+
+- **Contract names** are highlighted as functions
+- **Parameters** get distinct coloring from local variables
+- **Type names** are visually distinguished
+- **Variables** are colored based on their semantic role
+
+Semantic highlighting is **enabled by default** when LSP is active. For more details, see [SEMANTIC-HIGHLIGHTING.md](docs/SEMANTIC-HIGHLIGHTING.md).
 
 ### Using Tree-Sitter Mode (Emacs 29.1+)
 
