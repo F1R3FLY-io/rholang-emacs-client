@@ -83,7 +83,7 @@
         ;; Treemacs Integration (prefix: t - requires lsp-treemacs)
         "ts"  'lsp-treemacs-symbols             ; Show symbols
         "tc"  'lsp-treemacs-call-hierarchy      ; Call hierarchy
-        "tt"  'lsp-treemacs-type-hierarchy)))   ; Type hierarchy
+        "tt"  'lsp-treemacs-type-hierarchy))))  ; Type hierarchy
 
 (provide 'packages)
 
